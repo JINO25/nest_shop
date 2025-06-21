@@ -11,7 +11,7 @@ import { User } from "./User.entity";
 @Entity("address", { schema: "public" })
 export class Address {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
-  id: string;
+  id: number;
 
   @Column("character varying", {
     name: "city",

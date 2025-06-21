@@ -44,7 +44,7 @@ export class Product {
   @JoinColumn([{ name: "Category_id", referencedColumnName: "id" }])
   category: Category;
 
-  @ManyToOne(() => User, (user) => user.products)
+  @ManyToOne(() => User, (user) => user.products, { onDelete: 'CASCADE' })
   @JoinColumn([{ name: "User_id", referencedColumnName: "id" }])
   user: User;
 

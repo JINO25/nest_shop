@@ -9,8 +9,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import jwtConfig from './auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { AddressesModule } from './addresses/addresses.module';
+import { ProductsModule } from './products/products.module';
+import { DataResponseInterceptor } from './common/interceptors/data-response.interceptor';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -38,13 +42,20 @@ import { AuthGuard } from './auth/guards/auth.guard';
     UsersModule,
     AuthModule,
     ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider())
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    AddressesModule,
+    ProductsModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataResponseInterceptor
     }
   ],
 })

@@ -14,6 +14,7 @@ import { Order } from "./Order.entity";
 import { Product } from "./Product.entity";
 import { Role } from "./Role.entity";
 import { Voucher } from "./Voucher.entity";
+import { Exclude } from "class-transformer";
 
 @Entity("user", { schema: "public" })
 export class User {
@@ -26,6 +27,7 @@ export class User {
   @Column("character varying", { name: "email", length: 45 })
   email: string;
 
+  @Exclude()
   @Column("character varying", { name: "password", length: 255 })
   password: string;
 
