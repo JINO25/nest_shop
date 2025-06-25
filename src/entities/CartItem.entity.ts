@@ -14,8 +14,8 @@ export class CartItem {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
-  @Column("integer", { name: "quantity", nullable: true })
-  quantity: number | null;
+  @Column("integer", { name: "quantity", nullable: false })
+  quantity: number;
 
   @Column("character varying", { name: "status", length: 20 })
   status: string;
@@ -30,7 +30,7 @@ export class CartItem {
   @JoinColumn([{ name: "cart_id", referencedColumnName: "id" }])
   cart: Cart;
 
-  @ManyToOne(() => ProductVariant, (productVariant) => productVariant.cartItems)
+  @ManyToOne(() => ProductVariant, (productVariant) => productVariant.cartItems, { eager: true })
   @JoinColumn([{ name: "product_variant_id", referencedColumnName: "id" }])
   productVariant: ProductVariant;
 }

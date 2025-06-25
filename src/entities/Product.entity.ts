@@ -19,10 +19,10 @@ export class Product {
 
   @Column("character varying", {
     name: "name",
-    nullable: true,
+    nullable: false,
     length: 255,
   })
-  name: string | null;
+  name: string;
 
   @Column("character varying", {
     name: "description",

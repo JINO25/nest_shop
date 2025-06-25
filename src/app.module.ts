@@ -15,6 +15,7 @@ import { AddressesModule } from './addresses/addresses.module';
 import { ProductsModule } from './products/products.module';
 import { DataResponseInterceptor } from './common/interceptors/data-response.interceptor';
 import { CategoriesModule } from './categories/categories.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { CategoriesModule } from './categories/categories.module';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     AddressesModule,
     ProductsModule,
-    CategoriesModule
+    CategoriesModule,
+    CartModule
   ],
   controllers: [AppController],
   providers: [AppService,

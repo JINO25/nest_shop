@@ -22,6 +22,6 @@ export class Cart {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: User;
 
-  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { onDelete: "CASCADE" })
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { onDelete: "CASCADE", eager: true })
   cartItems: CartItem[];
 }

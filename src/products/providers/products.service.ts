@@ -156,8 +156,13 @@ export class ProductsService {
             throw new NotFoundException(`Product not found with id: ${id}`);
         }
 
-        product.name = dto.name ?? null;
-        product.description = dto.description ?? null;
+        if (dto.name) {
+            product.name = dto.name;
+        }
+
+        if (dto.description) {
+            product.description = dto.description;
+        }
 
         let category = await this.categoryRepo.findOne({ where: { name: dto.categoryName } });
 
@@ -211,11 +216,9 @@ export class ProductsService {
             throw new NotFoundException(`Product not found with id: ${productId}`);
         }
 
-        // Cập nhật thông tin product
         if (dto.name !== undefined) product.name = dto.name;
         if (dto.description !== undefined) product.description = dto.description;
 
-        // Xử lý category
         let category = await this.categoryRepo.findOne({ where: { name: dto.categoryName } });
         if (!category) {
             category = this.categoryRepo.create({ name: dto.categoryName });
@@ -224,14 +227,13 @@ export class ProductsService {
         product.category = category;
         const savedProduct = await this.productRepo.save(product);
 
-        // Xử lý variants
         if (dto.productVariants && dto.productVariants.length > 0) {
 
             for (const variantDTO of dto.productVariants) {
                 let variant: ProductVariant;
 
                 if (variantDTO.id) {
-                    // Cập nhật variant có sẵn
+
                     const existingVariant = await this.productVariantRepo.findOne({
                         where: { id: variantDTO.id, product: { id: productId } },
                         relations: ['product']
@@ -244,12 +246,9 @@ export class ProductsService {
                     variant = existingVariant;
                     variant.product = savedProduct;
                 } else {
-                    // Tạo variant mới
                     variant = new ProductVariant();
                     variant.product = savedProduct;
                 }
-
-                // Gán thuộc tính
 
                 if (variantDTO.option !== undefined) variant.option = variantDTO.option;
                 if (variantDTO.color !== undefined) variant.color = variantDTO.color;
@@ -260,7 +259,6 @@ export class ProductsService {
             }
         }
 
-        // Lấy lại product với đầy đủ relations
         const updatedProduct = await this.productRepo.findOne({
             where: { id: productId },
             relations: ['category', 'user', 'productVariants']

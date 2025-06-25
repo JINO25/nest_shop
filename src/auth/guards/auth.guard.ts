@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
       payload = await this.jwtService.verifyAsync(token, this.jwtConfiguration);
       request['user'] = payload;
     } catch (error) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Please login again!");
     }
 
     if (authTypes.length > 0) {

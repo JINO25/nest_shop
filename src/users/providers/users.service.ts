@@ -1,15 +1,17 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { BadRequestException, forwardRef, Inject, Injectable, RequestTimeoutException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../entities/User.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Role } from '../../entities/Role.entity';
 import { Address } from '../../entities/Address.entity';
 import { EmailAlreadyExistsException } from '../../common/exceptions/EmailAlreadyExistsException ';
 import { HashingProvider } from '../../auth/providers/hashing.provider';
+import { CartService } from '../../cart/providers/cart.service';
 
 @Injectable()
 export class UsersService {
@@ -26,50 +28,56 @@ export class UsersService {
     @Inject(forwardRef(() => HashingProvider))
     private hashingProvider: HashingProvider,
 
+    private cartService: CartService,
+
+    private dataSource: DataSource,
+
   ) { }
 
   async create(createUserDto: CreateUserDto) {
-    const existingUser = await this.userRepo.findOne({ where: { email: createUserDto.email } });
+    return await this.dataSource.transaction(async (manager) => {
+      const userRepo = manager.getRepository(User);
+      const roleRepo = manager.getRepository(Role);
+      const addrRepo = manager.getRepository(Address);
 
-    if (existingUser) {
-      throw new EmailAlreadyExistsException('Email already exists');
-    }
+      const existingUser = await userRepo.findOne({ where: { email: createUserDto.email } });
+      if (existingUser) throw new EmailAlreadyExistsException('Email already exists');
 
-    let defaultRole = await this.roleRepo.findOne({ where: { role: 'ROLE_USER' } });
+      let defaultRole = await roleRepo.findOne({ where: { role: 'ROLE_USER' } });
+      if (!defaultRole) {
+        defaultRole = roleRepo.create({ role: 'ROLE_USER' });
+        await roleRepo.save(defaultRole);
+      }
 
-    if (!defaultRole) {
-      defaultRole = this.roleRepo.create({ role: 'ROLE_USER' });
-      await this.roleRepo.save(defaultRole);
-    }
+      const hashedPassword = await this.hashingProvider.hashPassword(createUserDto.password);
 
-    const hashedPassword = await this.hashingProvider.hashPassword(createUserDto.password)
+      const user = userRepo.create({
+        email: createUserDto.email,
+        name: createUserDto.name,
+        password: hashedPassword,
+        photo: createUserDto.photo,
+        createAt: new Date(),
+        role: defaultRole,
+      });
 
-    const user = this.userRepo.create({
-      email: createUserDto.email,
-      name: createUserDto.name,
-      password: hashedPassword,
-      photo: createUserDto.photo,
-      createAt: new Date(),
-      role: defaultRole,
+      const savedUser = await userRepo.save(user);
+
+      const address = addrRepo.create({
+        city: createUserDto.city,
+        country: createUserDto.country,
+        street: createUserDto.street,
+        phoneNumber: createUserDto.phoneNumber,
+        user: savedUser,
+      });
+
+      await addrRepo.save(address);
+
+      await this.cartService.createCart(savedUser, manager);
+
+      return savedUser;
     });
-
-    const savedUser = await this.userRepo.save(user);
-
-    const address = this.addrRepo.create({
-      city: createUserDto.city,
-      country: createUserDto.country,
-      street: createUserDto.street,
-      phoneNumber: createUserDto.phoneNumber,
-      user: savedUser,
-    });
-
-    await this.addrRepo.save(address);
-
-    // await this.cartService.createCart(savedUser);
-
-    return savedUser;
-
   }
+
 
   async findAll(): Promise<User[]> {
     return await this.userRepo.find({
