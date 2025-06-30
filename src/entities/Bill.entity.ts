@@ -27,7 +27,7 @@ export class Bill {
   paymentTime: string | null;
 
   @Column("date", { name: "bill_date", nullable: true })
-  billDate: string | null;
+  billDate: Date | null;
 
   @Column("character varying", {
     name: "payment_status",

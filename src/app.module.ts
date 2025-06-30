@@ -16,6 +16,7 @@ import { ProductsModule } from './products/products.module';
 import { DataResponseInterceptor } from './common/interceptors/data-response.interceptor';
 import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { CartModule } from './cart/cart.module';
     AddressesModule,
     ProductsModule,
     CategoriesModule,
-    CartModule
+    CartModule,
+    OrdersModule
   ],
   controllers: [AppController],
   providers: [AppService,

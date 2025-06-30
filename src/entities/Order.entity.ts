@@ -17,14 +17,13 @@ export class Order {
   id: number;
 
   @Column("date", { name: "order_date", nullable: true })
-  orderDate: string | null;
+  orderDate: Date;
 
   @Column("character varying", {
     name: "status",
-    nullable: true,
     length: 20,
   })
-  status: string | null;
+  status: string;
 
   @Column("integer", { name: "User_id" })
   userId: number;
@@ -36,6 +35,9 @@ export class Order {
   @JoinColumn([{ name: "User_id", referencedColumnName: "id" }])
   user: User;
 
-  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, { onDelete: "CASCADE" })
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
+    onDelete: "CASCADE",
+    eager: true
+  })
   orderDetails: OrderDetail[];
 }

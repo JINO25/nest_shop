@@ -181,8 +181,8 @@ export class ProductsService {
 
         variant.option = dto.option ?? null;
         variant.color = dto.color ?? null;
-        variant.price = dto.price ?? null;
-        variant.stock = dto.stock ?? null;
+        variant.price = dto.price ?? 0;
+        variant.stock = dto.stock ?? 0;
         variant.product = product;
 
         await this.productVariantRepo.save(variant);

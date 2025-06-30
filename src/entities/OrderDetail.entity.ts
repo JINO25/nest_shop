@@ -14,11 +14,11 @@ export class OrderDetail {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
-  @Column("integer", { name: "quantity", nullable: true })
-  quantity: number | null;
+  @Column("integer", { name: "quantity" })
+  quantity: number;
 
-  @Column("double precision", { name: "price", nullable: true })
-  price: number | null;
+  @Column("double precision", { name: "price", nullable: false })
+  price: number;
 
   @Column("integer", { name: "Order_id" })
   orderId: number;
@@ -26,7 +26,7 @@ export class OrderDetail {
   @Column("integer", { name: "product_variant_id" })
   productVariantId: number;
 
-  @ManyToOne(() => Order, (order) => order.orderDetails)
+  @ManyToOne(() => Order, (order) => order.orderDetails, { onDelete: 'CASCADE' })
   @JoinColumn([{ name: "Order_id", referencedColumnName: "id" }])
   order: Order;
 

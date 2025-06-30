@@ -30,11 +30,11 @@ export class ProductVariant {
   })
   color: string | null;
 
-  @Column("double precision", { name: "price", nullable: true })
-  price: number | null;
+  @Column("double precision", { name: "price", nullable: false })
+  price: number;
 
-  @Column("integer", { name: "stock", nullable: true })
-  stock: number | null;
+  @Column("integer", { name: "stock", nullable: false })
+  stock: number;
 
   @Column("integer", { name: "Product_id" })
   productId: number;
