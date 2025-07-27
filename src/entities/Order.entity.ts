@@ -28,15 +28,14 @@ export class Order {
   @Column("integer", { name: "User_id" })
   userId: number;
 
-  @OneToMany(() => Bill, (bill) => bill.order, { onDelete: "CASCADE" })
+  @OneToMany(() => Bill, (bill) => bill.order)
   bills: Bill[];
 
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "User_id", referencedColumnName: "id" }])
   user: User;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
-    onDelete: "CASCADE",
     eager: true
   })
   orderDetails: OrderDetail[];

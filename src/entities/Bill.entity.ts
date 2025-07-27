@@ -39,7 +39,7 @@ export class Bill {
   @Column("integer", { name: "Order_id" })
   orderId: number;
 
-  @ManyToOne(() => Order, (order) => order.bills)
+  @ManyToOne(() => Order, (order) => order.bills, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "Order_id", referencedColumnName: "id" }])
   order: Order;
 }

@@ -30,7 +30,7 @@ export class CartItem {
   @JoinColumn([{ name: "cart_id", referencedColumnName: "id" }])
   cart: Cart;
 
-  @ManyToOne(() => ProductVariant, (productVariant) => productVariant.cartItems, { eager: true })
+  @ManyToOne(() => ProductVariant, (productVariant) => productVariant.cartItems, { onDelete: "CASCADE", eager: true })
   @JoinColumn([{ name: "product_variant_id", referencedColumnName: "id" }])
   productVariant: ProductVariant;
 }

@@ -29,7 +29,7 @@ export class Image {
   @Column("integer", { name: "product_id" })
   productId: number;
 
-  @ManyToOne(() => Product, (product) => product.images)
+  @ManyToOne(() => Product, (product) => product.images, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "product_id", referencedColumnName: "id" }])
   product: Product;
 }

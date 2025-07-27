@@ -32,7 +32,8 @@ export class OrderDetail {
 
   @ManyToOne(
     () => ProductVariant,
-    (productVariant) => productVariant.orderDetails
+    (productVariant) => productVariant.orderDetails,
+    { onDelete: "CASCADE" }
   )
   @JoinColumn([{ name: "product_variant_id", referencedColumnName: "id" }])
   productVariant: ProductVariant;

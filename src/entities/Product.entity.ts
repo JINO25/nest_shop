@@ -48,6 +48,8 @@ export class Product {
   @JoinColumn([{ name: "User_id", referencedColumnName: "id" }])
   user: User;
 
-  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product, { onDelete: "CASCADE" })
+  @OneToMany(() => ProductVariant, (productVariant) => productVariant.product,
+    // { onDelete: "CASCADE" }
+  )
   productVariants: ProductVariant[];
 }
