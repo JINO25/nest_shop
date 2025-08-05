@@ -324,6 +324,7 @@ export class OrderService {
                 .getRepository(Order)
                 .createQueryBuilder('order')
                 .leftJoinAndSelect('order.user', 'user')
+                .leftJoinAndSelect('order.bill', 'bill')
                 .leftJoinAndSelect('order.orderDetails', 'orderDetails')
                 .leftJoinAndSelect('orderDetails.productVariant', 'productVariant')
                 .leftJoinAndSelect('productVariant.product', 'product')
@@ -348,6 +349,10 @@ export class OrderService {
 
                 detail.productVariant.stock += detail.quantity;
                 await queryRunner.manager.getRepository(ProductVariant).save(detail.productVariant);
+            }
+
+            if (order.bill) {
+                await queryRunner.manager.getRepository(Bill).remove(order.bill);
             }
 
             order.status = OrderStatus.CANCELLED;

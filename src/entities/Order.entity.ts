@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Bill } from "./Bill.entity";
@@ -28,8 +29,8 @@ export class Order {
   @Column("integer", { name: "User_id" })
   userId: number;
 
-  @OneToMany(() => Bill, (bill) => bill.order)
-  bills: Bill[];
+  @OneToOne(() => Bill, (bill) => bill.order)
+  bill: Bill;
 
   @ManyToOne(() => User, (user) => user.orders, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "User_id", referencedColumnName: "id" }])

@@ -17,6 +17,7 @@ import { DataResponseInterceptor } from './common/interceptors/data-response.int
 import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
+import { BillsModule } from './bills/bills.module';
 
 @Module({
   imports: [
@@ -49,7 +50,8 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     CategoriesModule,
     CartModule,
-    OrdersModule
+    OrdersModule,
+    BillsModule
   ],
   controllers: [AppController],
   providers: [AppService,

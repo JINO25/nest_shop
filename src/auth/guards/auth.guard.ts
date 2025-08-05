@@ -46,6 +46,8 @@ export class AuthGuard implements CanActivate {
 
     if (authTypes.length > 0) {
       const role = payload?.role;
+      console.log(role, authTypes);
+
       if (!authTypes.includes(role)) {
         throw new ForbiddenException("You do not have permission!")
       }

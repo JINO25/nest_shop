@@ -69,7 +69,7 @@ export class OrdersController {
         return this.orderService.updateStatusOrder(id, status, userId);
     }
 
-    @Auth([Roles.Seller, Roles.User])
+    @Auth([Roles.Seller])
     @HttpCode(HttpStatus.OK)
     @Delete(':id/delete')
     deleteOrder(

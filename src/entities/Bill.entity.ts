@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Order } from "./Order.entity";
@@ -39,7 +39,7 @@ export class Bill {
   @Column("integer", { name: "Order_id" })
   orderId: number;
 
-  @ManyToOne(() => Order, (order) => order.bills, { onDelete: "CASCADE" })
+  @OneToOne(() => Order, (order) => order.bill, { onDelete: "CASCADE" })
   @JoinColumn([{ name: "Order_id", referencedColumnName: "id" }])
   order: Order;
 }
