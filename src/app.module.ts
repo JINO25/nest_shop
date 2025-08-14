@@ -18,13 +18,18 @@ import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { BillsModule } from './bills/bills.module';
+import { ImagesModule } from './images/images.module';
+import cloudinary from './config/cloudinary.config';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { MailModule } from './common/mail/mail.module';
+import mailConfig from './config/mail.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [dbConfig]
+      load: [dbConfig, cloudinary, mailConfig]
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -51,7 +56,10 @@ import { BillsModule } from './bills/bills.module';
     CategoriesModule,
     CartModule,
     OrdersModule,
-    BillsModule
+    BillsModule,
+    ImagesModule,
+    CloudinaryModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService,

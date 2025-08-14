@@ -23,8 +23,11 @@ export class Image {
   @Column("character varying", { name: "url", length: 255 })
   url: string;
 
+  @Column("boolean", { name: "is_cover", default: false })
+  isCover: boolean;
+
   @Column("character varying", { name: "public_id", length: 255 })
-  publicId: string;
+  public_Id: string;
 
   @Column("integer", { name: "product_id" })
   productId: number;

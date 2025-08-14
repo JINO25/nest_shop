@@ -3,12 +3,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
 import { AuthService } from './providers/auth.service';
 import { SignInDto } from './dto/signin.dto';
 import { Roles } from './enums/role.enum';
 import { Auth } from '../common/decorators/auth.decorator';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ForgotPasswordDTO } from './dto/forgot-password.dto';
+import { PasswordResetDTO } from './dto/password-reset.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -59,5 +61,21 @@ export class AuthController {
             sameSite: 'lax',
         });
         return 'Refresh successful'
+    }
+
+
+    @Auth([Roles.None])
+    @Post('forgot-password')
+    async forgotPassword(@Body() dto: ForgotPasswordDTO) {
+        return this.authService.forgotPassword(dto.email);
+    }
+
+    @Auth([Roles.None])
+    @Post('reset-password')
+    async resetPassword(
+        @Body() dto: PasswordResetDTO,
+        @Query('token') token: string
+    ) {
+        return this.authService.resetPassword(dto, token);
     }
 }

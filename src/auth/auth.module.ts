@@ -11,12 +11,18 @@ import { AuthController } from './auth.controller';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './config/jwt.config';
+import { MailModule } from '../common/mail/mail.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PasswordReset } from '../entities/PasswordReset.entity';
+import { User } from '../entities/User.entity';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
     ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider())
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    MailModule,
+    TypeOrmModule.forFeature([PasswordReset, User])
   ],
   providers: [AuthService,
     {
